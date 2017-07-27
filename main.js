@@ -1,30 +1,37 @@
 var HTMLimages = "";
 for(var n = 1; n<=151; n++){
-    HTMLimages += '<img src="http://pokeapi.co/media/img/'+n+'.png" alt="pokeman '+n+'">'
+    HTMLimages += "<img src='http://pokeapi.co/media/img/"+n+".png' alt='"+n+"'>"
 }
-
-$(document).ready(function(){
-    $("#poketainer").append(HTMLimages);
-
-// everything after this is just messing around while following lessons
-    $.get("http://pokeapi.co/api/v1/pokemon/1/", function(res) {
-        console.log(res);
-        console.log(res.types["0"].name);
-        for(var i=0; i<res.types.length; i++) {
-            console.log(res.types[i].name);
-        }
-    }, "json");
-
-    $.get("http://pokeapi.co/api/v1/pokemon/1/", function(res) {
+// not sure if it matters if function is inside or outside of .ready??
+function info(pm){
+    $.get("http://pokeapi.co/api/v1/pokemon/"+pm+"/", function(res) {
         var html_str = "";
-        html_str += "<h4>Types</h4>";
+        html_str += "<h1>" +res.name+ "</h1>";
+        html_str += '<img src="http://pokeapi.co/media/img/'+pm+'.png" alt="'+pm+'">'
+        html_str += "<h3>Types</h3>";
         html_str += "<ul>"; 
         for(var i = 0; i < res.types.length; i++) {
             html_str += "<li>" + res.types[i].name + "</li>";
         }
         html_str += "</ul>";
-        $("#bulbasaur").html(html_str);
+        html_str += "<h3>Height</h3>";
+        html_str += "<h5>"+res.height+"</h5>";
+        html_str += "<h3>Weight</h3>";
+        html_str += "<h5>"+res.weight+"</h5>";
+        $("#pokedex").html(html_str);
     }, "json");
+}
 
+
+$(document).ready(function(){
+    $("#poketainer").html(HTMLimages);
+
+    $("#poketainer img").click(function() {
+        var imgclicked = $(this).attr("alt");
+        info(imgclicked);
+
+        
+    });
+    
 
 })
